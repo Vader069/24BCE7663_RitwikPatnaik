@@ -1,0 +1,31 @@
+show databases;
+create database VIT_CAMPUS;
+drop database VIT_CAMPUS;
+create database VIT_CAMPUS;
+use VIT_CAMPUS; /*int1 2^8 int2 2^16 int4 2^32 int8 2^64 both positive negative numbers*/
+create table CSE(Sid int8 , sname varchar(100), smarks int1);
+create table ECE(Sid int8 , sname varchar(100), smarks int1);
+create table MECH(Sid int8 , sname varchar(100), smarks int1);
+show tables from VIT_CAMPUS;
+
+select * from cse;
+select * from ece;
+select * from mech;
+
+insert into cse values(100,'Ritwik',88);
+insert into cse values(101,'Kiran',90);
+insert into cse values(102,'Ankit',55);
+insert into cse values(103,'Adarsh',78);
+insert into cse values(104,'Rupa',89);
+
+insert into ece values(107,'Karthik',88);
+insert into ece values(108,'Aditya',87);
+insert into ece values(109,'Rehan',84);
+insert into ece values(110,'Riju',81);
+insert into ece values(111,'Hari',90);
+
+insert into mech values(120,'Arjun',91);
+insert into mech values(121,'Nikhil',87);
+insert into mech values(122,'Arya',86);
+insert into mech values(123,'Usha',90);
+insert into mech values(124,'Gauri',79);
