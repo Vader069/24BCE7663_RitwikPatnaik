@@ -1,0 +1,58 @@
+desc cse;
+Alter table cse add( sdept varchar(50));
+insert into cse values(105,'Kamal',89,'CSE');
+alter table cse add sphone int8;
+alter table cse drop column sphone;
+alter table cse add scountry varchar(20) default 'INDIA';
+alter table cse rename column sdept to dept;
+
+truncate table cse;
+
+rename table mech to MECHA;
+
+
+
+CREATE TABLE Worker (
+	WORKER_ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	FIRST_NAME CHAR(25),
+	LAST_NAME CHAR(25),
+	SALARY INT(15),
+	JOINING_DATE DATETIME,
+	DEPARTMENT CHAR(25)
+);
+
+INSERT INTO Worker 
+	(WORKER_ID, FIRST_NAME, LAST_NAME, SALARY, JOINING_DATE, DEPARTMENT) VALUES
+		(001, 'Monika', 'Arora', 100000, '14-02-20 09.00.00', 'HR'),
+		(002, 'Niharika', 'Verma', 80000, '14-06-11 09.00.00', 'Admin'),
+		(003, 'Vishal', 'Singhal', 300000, '14-02-20 09.00.00', 'HR'),
+		(004, 'Amitabh', 'Singh', 500000, '14-02-20 09.00.00', 'Admin'),
+		(005, 'Vivek', 'Bhati', 500000, '14-06-11 09.00.00', 'Admin'),
+		(006, 'Vipul', 'Diwan', 200000, '14-06-11 09.00.00', 'Account'),
+		(007, 'Satish', 'Kumar', 75000, '14-01-20 09.00.00', 'Account'),
+		(008, 'Geetika', 'Chauhan', 90000, '14-04-11 09.00.00', 'Admin');
+select * from worker;
+update worker set first_name='Ritwik' where worker_id=1;
+update worker set salary=salary+10000;
+delete from worker where worker_id=8;
+
+create table emp(id int);
+start transaction;
+insert into emp values(101);
+savepoint a1;
+insert into emp values(102);
+savepoint a2;
+select * from emp;
+insert into emp values(103);
+savepoint a3;
+ROLLBACK TO a1;
+commit;
+drop table emp;
+
+select first_name,salary,department from worker where salary < 100000 and department='admin';
+select first_name,salary,department from worker where salary < 100000 or department='admin';
+select first_name,salary,department from worker where salary>100000;
+
+select first_name,salary,department from worker where salary=85000;
+
+select first_name,salary,department from worker where salary<100000;
