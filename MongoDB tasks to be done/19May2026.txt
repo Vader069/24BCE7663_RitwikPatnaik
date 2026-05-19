@@ -1,0 +1,30 @@
+/*-----------------------------------------------------------------------*/
+select first_name, department, salary from worker where department='Admin' and salary>=100000;
+select first_name,department,salary from worker where worker_id in (1,2,4);
+select first_name,department,salary from worker where worker_id not in (1,2,4);
+select first_name,department,salary from worker where salary between 80000 and 300000;
+select first_name,department,salary from worker where salary not between 80000 and 300000;
+select first_name,department,salary from worker where salary between 100000 and 300000 and department in ('HR','Admin');
+select first_name,department,salary from worker where salary between 100000 and 300000 and department not in ('HR','Admin');
+select first_name,department,salary from worker where first_name like '%k';
+select first_name,department,salary from worker where first_name like '_____';
+select first_name,department,salary from worker where first_name like 'R%';
+select department from worker where department like 'A_%';
+select sum(salary) as Total_sal from worker;
+select count(distinct salary) as Unique_SAL from worker group by department;
+select count(*) as People_dept from worker group by department;
+select department, max(salary) from worker group by department;
+select min(salary) from worker where department ="admin" and first_name not like '%a%';
+select Joining_date as Date from worker;
+select worker_id,first_name, 
+case
+when salary>300000 then 'Rich'
+when salary>100000 and salary<300000 then 'Middle'
+else 'poor'
+end
+as social_Stats from worker;
+
+create view Worker_Table as select * from worker;
+create view maxsalaryadmin as select max(salary) as SALMAX from worker where department='admin';
+select * from maxsalaryadmin;
+drop view maxsalaryadmin;
