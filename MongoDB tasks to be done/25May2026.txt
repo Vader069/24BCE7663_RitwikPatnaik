@@ -1,0 +1,60 @@
+mongosh: localhost:27017
+
+>_MONGOSH
+
+show databases
+admin   40.00 KiB
+config  60.00 KiB
+local   80.00 KiB
+show dbs
+admin   40.00 KiB
+config  60.00 KiB
+local   80.00 KiB
+use vit
+switched to db vit
+db
+vit
+db.dropDatabase()
+{ ok: 1, dropped: 'vit' }
+show dbs
+admin   40.00 KiB
+config  60.00 KiB
+local   80.00 KiB
+db.createCollection("Student")
+{ ok: 1 }
+show collections
+Student
+db.Student.drop()
+true
+show collections
+db.createCollection("Employee")
+{ ok: 1 }
+db.Employee.insert({name:'Ankit',department:'CSE'})
+DeprecationWarning: Collection.insert() is deprecated. Use insertOne, insertMany, or bulkWrite.
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6a1458418d791c2aaa97cd11')
+  }
+}
+db.Employee.insert({name:'Tamil',mark:90,location:'Haryana'})
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6a1458828d791c2aaa97cd12')
+  }
+}
+db.Employee.find()
+{
+  _id: ObjectId('6a1458418d791c2aaa97cd11'),
+  name: 'Ankit',
+  department: 'CSE'
+}
+{
+  _id: ObjectId('6a1458828d791c2aaa97cd12'),
+  name: 'Tamil',
+  mark: 90,
+  location: 'Haryana'
+}
+vit
+
