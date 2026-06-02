@@ -16,12 +16,12 @@ public void read_data(String sl_no){
 			System.out.println(rs.getString("sl_no") + "\t\t" + rs.getString("name") + "\t\t" + rs.getString("email"));
 		}
 	} catch (Exception e) {
-		System.out.println(e);
+		System.out.println(e.toString());
 	}
 }
 
 
-public void edit_data(String sl_no){
+public void Edit(String sl_no){
 	DB_Connection obj_DB_Connection=new DB_Connection();
 	Connection connection=obj_DB_Connection.get_connection();
 	PreparedStatement ps=null;
@@ -39,6 +39,41 @@ public void edit_data(String sl_no){
 			System.out.println("---------------");
 			}
 	}catch (Exception e) {
-		System.out.println(e);
+		System.out.println(e.toString());
 	}
+}
+
+
+public void Truc() {
+	try {
+	DB_connection con=new DB_connection();
+	Connection cnn=con.get_connection();
+	PreparedStatement ps=null;
+	ResultSet rs=null;
+	String q="truncate table user";
+	ps=cnn.prepareStatement(q);
+	ps.executeUpdate();
+	System.out.println("Table Truncated .");
+	
+	}catch(Exception e) {
+		System.out.println(e.toString());
+	}
+}
+
+
+public void alterData() {
+	try {
+	DB_connection con=new DB_connection();
+	Connection connection=con.get_connection();
+	PreparedStatement ps=null;
+	ResultSet rs=null;
+	String query = "alter table user add Phno int not null";
+	ps=connection.prepareStatement(query);
+	ps.executeUpdate();
+	System.out.println("Table Altered");
+	
+	}catch(Exception e) {
+		System.out.println(e.toString());
+	}
+	
 }
