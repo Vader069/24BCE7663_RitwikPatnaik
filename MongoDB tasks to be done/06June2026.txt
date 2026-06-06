@@ -1,0 +1,294 @@
+use VIT
+switched to db VIT
+db.sales.getIndexes()
+[ { v: 2, key: { _id: 1 }, name: '_id_' } ]
+
+db.sales.createIndex({ID: 1})
+ID_1
+db.sales.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { ID: 1 }, name: 'ID_1' }
+]
+
+
+db.users.insertMany([
+   { email:  "john@test.com", name: "john"},
+   { email:  "jane@test.com", name: "jane"},
+]);
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6a241eb1087966915da65cbe'),
+    '1': ObjectId('6a241eb1087966915da65cbf')
+  }
+}
+
+db.users.getIndexes()
+[ { v: 2, key: { _id: 1 }, name: '_id_' } ]
+db.users.createIndex({email: 1})
+email_1
+db.users.dropIndex("email_1")
+{ nIndexesWas: 2, ok: 1 }
+db.users.getIndexes()
+[ { v: 2, key: { _id: 1 }, name: '_id_' } ]
+db.users.createIndex({email: 1},{unique: true})
+email_1
+db.users.insertOne({ email:  "john@test.com", name: "johny"})
+MongoServerError: E11000 duplicate key error collection: VIT.users index: email_1 dup key: { email: "john@test.com" }
+db.users.drop()
+true
+db.users.insertMany([
+   { email:  "john@test.com", name: "john"},
+   { email:  "john@test.com", name: "johny"},
+   { email:  "jane@test.com", name: "jane"},
+])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6a242020087966915da65cc1'),
+    '1': ObjectId('6a242020087966915da65cc2'),
+    '2': ObjectId('6a242020087966915da65cc3')
+  }
+}
+db.users.createIndex({email: 1},{unique:true})
+MongoServerError[DuplicateKey]: Index build failed: 58e26cf0-628f-4438-bf5e-e496010a3600: Collection VIT.users ( e135c8dd-c35e-4b80-a631-9231c0834784 ) :: caused by :: E11000 duplicate key error collection: VIT.users index: email_1 dup key: { email: "john@test.com" }
+db.users.deleteOne({name:'johny', email: 'john@test.com'});
+{
+  acknowledged: true,
+  deletedCount: 1
+}
+db.users.createIndex({email: 1},{unique:true})
+email_1
+db.locations.insertOne({
+	address: "Downtown San Jose, CA, USA",
+	lat: 37.335480,
+	long: -121.893028
+})
+{
+  acknowledged: true,
+  insertedId: ObjectId('6a2421be087966915da65cc4')
+}
+db.locations.createIndex({
+	lat: 1,
+	long: 1
+},{ unique: true });
+lat_1_long_1
+db.locations.insertOne({
+	address: "Dev Bootcamp, San Jose, CA, USA",
+	lat: 37.335480,
+	long: -122.893028
+})
+{
+  acknowledged: true,
+  insertedId: ObjectId('6a2421ce087966915da65cc5')
+}
+db.locations.insertOne({
+	address: "Central San Jose, CA, USA",
+	lat: 37.335480,
+	long: -121.893028
+})
+MongoServerError: E11000 duplicate key error collection: VIT.locations index: lat_1_long_1 dup key: { lat: 37.33548, long: -121.893028 }
+
+
+
+db.sales.createIndex({ID: 1,name: 1})
+ID_1_name_1
+db.sales.find({ID: 110 , name: "Americanos"}).explain('executionStats');
+{
+          ID: 1,
+          name: 1
+        },
+        indexName: 'ID_1_name_1',
+        isMultiKey: false,
+        multiKeyPaths: {
+          ID: [],
+          name: []
+        },
+        isUnique: false,
+        isSparse: false,
+        isPartial: false,
+        indexVersion: 2,
+        direction: 'forward',
+        indexBounds: {
+          ID: [
+            '[110, 110]'
+          ],
+          name: [
+            '["Americanos", "Americanos"]'
+          ]
+        },
+        keysExamined: 0,
+        seeks: 1,
+        dupsTested: 0,
+        dupsDropped: 0,
+        peakTrackedMemBytes: 0
+      }
+    }
+  },
+  queryShapeHash: '3EC1046EF2FAA527DD147F10822BED2C461ABF453005F733FB002B2857348457',
+  command: {
+    find: 'sales',
+    filter: {
+      ID: 110,
+      name: 'Americanos'
+    },
+    '$db': 'VIT'
+  },
+  serverInfo: {
+    host: 'Ritwik',
+    port: 27017,
+    version: '8.3.2',
+    gitVersion: '89f54eb32e217d2f7bfcad50e5919f3033bb9611'
+  },
+  serverParameters: {
+    internalQueryFacetBufferSizeBytes: 104857600,
+    internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+    internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+    internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600,
+    internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+    internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+    internalQueryProhibitBlockingMergeOnMongoS: 0,
+    internalQueryMaxAddToSetBytes: 104857600,
+    internalQueryFrameworkControl: 'trySbeRestricted',
+    internalQueryPlannerIgnoreIndexWithCollationForRegex: 1
+  },
+  ok: 1
+}
+
+db.sales.find({ID:104}).explain('executionStats');
+        stage: 'IXSCAN',
+        indexVersion: 2,
+        direction: 'forward',
+        indexBounds: {
+          ID: [
+            '[104, 104]'
+          ],
+          name: [
+            '[MinKey, MaxKey]'
+          ]
+        },
+        keysExamined: 1,
+        seeks: 1,
+        dupsTested: 0,
+        dupsDropped: 0,
+        peakTrackedMemBytes: 0
+      }
+    }
+  },
+  queryShapeHash: 'A3C47240A8A6F8050F8E01FECA83816E244509FC861AC6D497240FDEB8BC760F',
+  command: {
+    find: 'sales',
+    filter: {
+      ID: 104
+    },
+    '$db': 'VIT'
+  },
+  serverInfo: {
+    host: 'Ritwik',
+    port: 27017,
+    version: '8.3.2',
+    gitVersion: '89f54eb32e217d2f7bfcad50e5919f3033bb9611'
+  },
+  serverParameters: {
+    internalQueryFacetBufferSizeBytes: 104857600,
+    internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+    internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+    internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600,
+    internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+    internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+    internalQueryProhibitBlockingMergeOnMongoS: 0,
+    internalQueryMaxAddToSetBytes: 104857600,
+    internalQueryFrameworkControl: 'trySbeRestricted',
+    internalQueryPlannerIgnoreIndexWithCollationForRegex: 1
+  },
+  ok: 1
+}
+db.sales.find({name: "Americanos"}).explain("executionStats")
+        }
+      },
+      nss: 'VIT.sales',
+      direction: 'forward'
+    },
+    rejectedPlans: []
+  },
+  executionStats: {
+    executionSuccess: true,
+    nReturned: 0,
+    executionTimeMillis: 1,
+    totalKeysExamined: 0,
+    totalDocsExamined: 10,
+    executionStages: {
+      isCached: false,
+      stage: 'COLLSCAN',
+      filter: {
+        name: {
+          '$eq': 'Americanos'
+        }
+      },
+      nReturned: 0,
+      executionTimeMillisEstimate: 0,
+      works: 11,
+      advanced: 0,
+      needTime: 10,
+      needYield: 0,
+      saveState: 0,
+      restoreState: 0,
+      isEOF: 1,
+      nss: 'VIT.sales',
+      direction: 'forward',
+      docsExamined: 10
+    }
+  },
+  queryShapeHash: '190B49B10B99DC1B061B65AABA576DA47C01D4B076566C3D2962874F0FC9CF25',
+  command: {
+    find: 'sales',
+    filter: {
+      name: 'Americanos'
+    },
+    '$db': 'VIT'
+  },
+  serverInfo: {
+    host: 'Ritwik',
+    port: 27017,
+    version: '8.3.2',
+    gitVersion: '89f54eb32e217d2f7bfcad50e5919f3033bb9611'
+  },
+  serverParameters: {
+    internalQueryFacetBufferSizeBytes: 104857600,
+    internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+    internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+    internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600,
+    internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+    internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+    internalQueryProhibitBlockingMergeOnMongoS: 0,
+    internalQueryMaxAddToSetBytes: 104857600,
+    internalQueryFrameworkControl: 'trySbeRestricted',
+    internalQueryPlannerIgnoreIndexWithCollationForRegex: 1
+  },
+  ok: 1
+}
+
+
+db.sales.dropIndexes()
+{
+  nIndexesWas: 2,
+  msg: 'non-_id indexes dropped for collection',
+  ok: 1
+}
+db.sales.createIndex({ID: 1})
+ID_1
+db.sales.getIndex()
+TypeError: db.sales.getIndex is not a function
+db.sales.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { ID: 1 }, name: 'ID_1' }
+]
+db.sales.dropIndex("ID_1")
+{ nIndexesWas: 2, ok: 1 }
+db.sales.getIndexes()
+[ { v: 2, key: { _id: 1 }, name: '_id_' } ]
+
+
+
